@@ -18,11 +18,8 @@ where
 import Pdf.Core
 
 import Pdf.Document.File
-import Pdf.Document.Encryption (Decryptor)
 
-import Data.IORef
-
-data Pdf = Pdf File (IORef (Maybe Decryptor))
+newtype Pdf = Pdf File
 
 -- | PDF document
 --

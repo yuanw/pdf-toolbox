@@ -87,7 +87,7 @@ loadDecodedStream pdf ref s@(S d _) = do
   return (d', cont)
 
 loadRawStream :: Pdf -> Ref -> Stream -> IO (Dict, Lazy.ByteString)
-loadRawStream pdf _ s@(S d _) = do
-  is <- rawStreamContent pdf s
+loadRawStream pdf ref s@(S d _) = do
+  is <- rawStreamContent pdf ref s
   cont <- Lazy.ByteString.fromChunks <$> Streams.toList is
   return (d, cont)

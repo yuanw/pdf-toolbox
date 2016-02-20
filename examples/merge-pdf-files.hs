@@ -99,7 +99,7 @@ writePdfPage writer stateRef page@(Page pdf _ pageDict) = do
   contentRefs' <- forM contentRefs $ \r -> do
     o <- lookupObject pdf r
     case o of
-      Stream s -> writeStream' writer stateRef pdf s
+      Stream s -> writeStream' writer stateRef pdf r s
       _ -> error "stream expected"
 
   resources <- do
@@ -139,25 +139,25 @@ writeTrailer writer stateRef = do
     , ("Root", Ref catalogRef)
     ])
 
-writeStream' :: Writer -> IORef AppState -> Pdf -> Stream -> IO Ref
-writeStream' writer stateRef pdf s@(S dict _) = do
+writeStream' :: Writer -> IORef AppState -> Pdf -> Ref -> Stream -> IO Ref
+writeStream' writer stateRef pdf ref s@(S dict _) = do
   cont <- do
-    is <- rawStreamContent pdf s
+    is <- rawStreamContent pdf ref s
     Lazy.ByteString.fromChunks <$> Streams.toList is
 
   index <- nextFreeIndex stateRef
-  let ref = R index 0
+  let r = R index 0
 
   Dict dict' <- writeObjectChildren writer stateRef pdf (Dict dict)
-  writeStream writer ref dict' cont
-  return ref
+  writeStream writer r dict' cont
+  return r
 
 writeObjectChildren :: Writer -> IORef AppState -> Pdf -> Object -> IO Object
 writeObjectChildren writer stateRef pdf (Ref r) = do
   o <- lookupObject pdf r
   case o of
     Stream s -> do
-      ref <- writeStream' writer stateRef pdf s
+      ref <- writeStream' writer stateRef pdf r s
       return $ Ref ref
     _ -> do
       o' <- writeObjectChildren writer stateRef pdf o
