@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
 -- | Various types
 
 module Pdf.Document.Types
@@ -18,8 +17,10 @@ import qualified Data.Vector as Vector
 data Rectangle a = Rectangle a a a a
   deriving Show
 
-instance MonadFail (Either String) where
-  fail = Left
+instance String ~ err => MonadFail (Either err) where
+    fail :: String -> Either String a
+    fail = Left
+
 
 -- | Create rectangle form an array of 4 numbers
 rectangleFromArray :: Array -> Either String (Rectangle Double)
