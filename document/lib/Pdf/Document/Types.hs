@@ -1,4 +1,4 @@
-
+{-# LANGUAGE FlexibleInstances #-}
 -- | Various types
 
 module Pdf.Document.Types
