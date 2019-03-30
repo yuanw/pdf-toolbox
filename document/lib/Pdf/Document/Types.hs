@@ -11,11 +11,15 @@ where
 import Pdf.Core
 import Pdf.Core.Util
 
+import Control.Monad.Fail
 import qualified Data.Vector as Vector
 
 -- | Rectangle
 data Rectangle a = Rectangle a a a a
   deriving Show
+
+instance MonadFail (Either String) where
+  fail = Left
 
 -- | Create rectangle form an array of 4 numbers
 rectangleFromArray :: Array -> Either String (Rectangle Double)
