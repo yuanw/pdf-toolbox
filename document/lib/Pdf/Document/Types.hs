@@ -1,5 +1,5 @@
 -- | Various types
-
+{-# LANGUAGE TypeFamilies #-}
 module Pdf.Document.Types
 (
   Rectangle(..),
