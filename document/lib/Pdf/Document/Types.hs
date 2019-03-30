@@ -18,7 +18,6 @@ data Rectangle a = Rectangle a a a a
   deriving Show
 
 instance String ~ err => MonadFail (Either err) where
-    fail :: String -> Either String a
     fail = Left
 
 
